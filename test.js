@@ -13,6 +13,11 @@ if (!String.prototype.format) {
 function restaurantList() {
     this.restaurant = []
     this.rst = $('#rsts')
+    var html = '<div id="{3}" class="test">\
+                    <h2><a class="showReadOnlyBtn">{0}</a></h2>\
+                    <p>{1}</p>\
+                    <span>{2}</span>\
+                </div>'
 
     this.updateData = function(){
         this.restaurant = (function(){
@@ -34,16 +39,13 @@ function restaurantList() {
         var content;
 
         for (i in this.restaurant) {
-            var item = '<div>\
-                            <h2>{0}</h2>\
-                            <p>{1}</p>\
-                            <span>{2}</span>\
-                        </div>'
+            var item = html;
 
             item = item.format(
                 this.restaurant[i].Name, 
                 this.restaurant[i].Location, 
-                this.restaurant[i].Category)
+                this.restaurant[i].Category,
+                i)
             content += item;
         }
         this.rst.html(content)
@@ -66,11 +68,11 @@ function restaurant() {
                     </div>\
                     <div class="field">\
                         <label>Location</label>\
-                        <input type="text" name="rst-location" value="{1}" placeholder="Last Name">\
+                        <input type="text" id="rst-location" value="{1}" placeholder="Last Name">\
                     </div>\
                     <div class="field">\
                         <label>Category</label>\
-                        <input type="text" name="rst-category" value="{2}" placeholder="Last Name">\
+                        <input type="text" id="rst-category" value="{2}" placeholder="Last Name">\
                     </div>\
                     <button id="addRestaurantBtn" onclick="rst.addRestaurant()" class="ui button">Add</button>\
                     <button id="delRestaurantBtn" onclick="rst.delRestaurant()" class="ui button">Del</button>\
@@ -96,31 +98,31 @@ function restaurant() {
             this.value.Category)
         this.form.html(content)
 
-        $('#setRestaurantBtn, #delRestaurantBtn').hide()
+        $('#addRestaurantBtn').hide()
         $('.ui.modal').modal('show');
     }
     this.showEmpty = function() {
         var content = html.format()
         this.form.html(content)
 
-        $('#addRestaurantBtn').hide()
+        $('#setRestaurantBtn, #delRestaurantBtn').hide()
         $('.ui.modal').modal('show');
     }
 
     this.addRestaurant = function() {
         url = 'api/addRestaurant?name={0}&location={1}&category={2}'
         .format(
-            this.value.Name,
-            this.value.Location,
-            this.value.Category)
+            $('#rst-name').val(),
+            $('#rst-location').val(),
+            $('#rst-category').val())
         $.get(url)
     }
     this.setRestaurant = function() {
         url = 'api/setRestaurant?name={0}&location={1}&category={2}'
         .format(
-            this.value.Name,
-            this.value.Location,
-            this.value.Category)
+            $('#rst-name').val(),
+            $('#rst-location').val(),
+            $('#rst-category').val())
         $.get(url)
     }
     this.delRestaurant = function() {
@@ -129,3 +131,12 @@ function restaurant() {
     }
 }
 
+rst = new restaurant()
+rsts = new restaurantList()
+rsts.update()
+
+$('#rsts').on('click', 'div.test', function(){
+    var id = $(this).attr('id')
+    rst.value = rsts.restaurant[id]
+    rst.showReadOnly()
+})
