@@ -131,12 +131,56 @@ function restaurant() {
     }
 }
 
-rst = new restaurant()
-rsts = new restaurantList()
-rsts.update()
-
 $('#rsts').on('click', 'div.test', function(){
     var id = $(this).attr('id')
     rst.value = rsts.restaurant[id]
     rst.showReadOnly()
 })
+
+rst = new restaurant()
+rsts = new restaurantList()
+rsts.update()
+
+// 
+// this function class return multi distance from origins & walk time
+// 
+// origins: string 
+// distances: array
+// 
+function googleDistances() {
+    this.origins = ''
+    this.distances = []
+    thi.mod = 'walking';
+    this.data;
+
+    var ajaxUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json'
+    this.getJsonData = function() {
+        var parameters = {
+            origins: this.origins,
+            distances: this.distances.join('|'),
+            mod: this.mod;
+        }
+
+        $.get(url, parameters)
+        .done(function(data){
+            alert(data)
+        })
+    }
+
+    this.getTimes = function() {
+        var elements = this.data.rows.elements;
+        var times = [];
+        for (i in elements) {
+            times[i] = elements.duration.text;
+        }
+        return times
+    }
+    this.getDistances = function() {
+        var elements = this.data.rows.elements;
+        var distances = [];
+        for (i in elements) {
+            distances[i] = elements.distance.text;
+        }
+        return distances
+    }
+}

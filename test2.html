@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="jquery-2.2.1.min.js"></script>
+    <!-- <script src="googleMapDistance.js"></script> -->
+</head>
+<body>
+<form action="">
+    <select name="" id="select">
+        <option value="A">AA</option>
+        <option value="B">BB</option>
+        <option value="C">CC</option>
+        <option value="速食">速食</option>
+    </select>
+</form>
+<button id="btn1">test</button>
+<script>
+    $('#select').val('速食')
+    $('#btn1').on('click', function function_name() {
+        var val = $('#select').val()
+        alert(val)
+    })
+</script>
+</body>
+</html>
